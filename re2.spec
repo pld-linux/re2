@@ -12,6 +12,7 @@ Group:		Libraries
 URL:		http://code.google.com/p/re2/
 Source0:	http://re2.googlecode.com/files/%{name}-%{version}.tgz
 # Source0-md5:	ef66646926e6cb8f11f277b286eac579
+BuildRequires:	libstdc++-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
