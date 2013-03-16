@@ -1,0 +1,13 @@
+--- re2-20130115/Makefile~	2012-10-21 16:15:03.000000000 +0300
++++ re2-20130115/Makefile	2013-03-16 14:27:32.606438040 +0200
+@@ -214,7 +214,9 @@
+ 
+ testofiles: $(TESTOFILES)
+ 
+-test: $(DTESTS) $(TESTS) $(STESTS) debug-test static-test shared-test
++compile-test: $(DTESTS) $(TESTS) $(STESTS)
++
++test: compile-test debug-test static-test shared-test
+ 
+ debug-test: $(DTESTS)
+ 	@echo

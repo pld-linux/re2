@@ -12,6 +12,7 @@ Group:		Libraries
 URL:		http://code.google.com/p/re2/
 Source0:	http://re2.googlecode.com/files/%{name}-%{version}.tgz
 # Source0-md5:	ef66646926e6cb8f11f277b286eac579
+Patch0:		test-compile.patch
 BuildRequires:	libstdc++-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -52,12 +53,15 @@ Static %{name} library.
 Statyczna biblioteka %{name}.
 
 %prep
-%setup -q -n %{name}
+%setup -qc
+# want versioned builddir, so shuffle files around
+mv re2 .re2; mv .re2/* .
+%patch0 -p1
 
 %build
 # The -pthread flag issue has been submitted upstream:
 # http://groups.google.com/forum/?fromgroups=#!topic/re2-dev/bkUDtO5l6Lo
-%{__make} \
+%{__make} all %{?with_tests:compile-test} \
 	CXX="%{__cxx}" \
 	CXXFLAGS="%{rpmcxxflags}" \
 	LDFLAGS="%{rpmldflags} -pthread" \
