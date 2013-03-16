@@ -98,6 +98,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
+%doc doc/syntax.txt
 %{_libdir}/libre2.so
 %{_includedir}/re2
 
