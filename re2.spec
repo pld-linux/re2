@@ -6,7 +6,7 @@
 Summary:	C++ fast alternative to backtracking RE engines
 Name:		re2
 Version:	20130115
-Release:	3
+Release:	4
 License:	BSD
 Group:		Libraries
 URL:		http://code.google.com/p/re2/
