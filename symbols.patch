@@ -2,13 +2,13 @@ export for chromium:
 
 re2::FilteredRE2::AllMatches(re2::StringPiece const&, std::vector<int, std::allocator<int> > const&, std::vector<int, std::allocator<int> >*) const'
 
---- re2-20130115/libre2.symbols~	2013-03-16 14:28:54.000000000 +0200
-+++ re2-20130115/libre2.symbols	2013-03-16 14:32:44.874122764 +0200
-@@ -10,6 +10,7 @@
- 		_ZlsRSoRKN3re211StringPieceE;
+--- re2-2015-05-01/libre2.symbols~	2015-04-30 17:34:34.000000000 +0300
++++ re2-2015-05-01/libre2.symbols	2015-06-07 21:10:42.198012807 +0300
+@@ -11,6 +11,7 @@
  		# re2::FilteredRE2*
  		_ZN3re211FilteredRE2*;
+ 		_ZNK3re211FilteredRE2*;
 +		_ZNK3re211FilteredRE210AllMatchesERKNS_11StringPieceERKSt6vectorIiSaIiEEPS6_;
+ 		# flags
+ 		_ZN3re2*FLAGS_*;
  	local:
- 		*;
- };

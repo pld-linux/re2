@@ -3,17 +3,19 @@
 %bcond_without	tests		# build without tests
 %bcond_without	static_libs	# don't build static libraries
 
+%define		subver	2015-05-01
+%define		ver		%(echo %{subver} | tr -d -)
 Summary:	C++ fast alternative to backtracking RE engines
 Name:		re2
-Version:	20130115
-Release:	4
+Version:	%{ver}
+Release:	1
 License:	BSD
 Group:		Libraries
-URL:		http://code.google.com/p/re2/
-Source0:	http://re2.googlecode.com/files/%{name}-%{version}.tgz
-# Source0-md5:	ef66646926e6cb8f11f277b286eac579
+Source0:	https://github.com/google/re2/archive/%{subver}/%{name}-%{version}.tar.gz
+# Source0-md5:	72025cc33750878d0457c9422b396ee7
 Patch0:		test-compile.patch
 Patch1:		symbols.patch
+URL:		https://github.com/google/re2
 BuildRequires:	libstdc++-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -54,9 +56,7 @@ Static %{name} library.
 Statyczna biblioteka %{name}.
 
 %prep
-%setup -qc
-# want versioned builddir, so shuffle files around
-mv re2 .re2; mv .re2/* .
+%setup -q -n %{name}-%{subver}
 %patch0 -p1
 %patch1 -p1
 
