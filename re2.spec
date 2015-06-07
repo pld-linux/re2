@@ -3,7 +3,7 @@
 %bcond_without	tests		# build without tests
 %bcond_without	static_libs	# don't build static libraries
 
-%define		subver	2015-05-01
+%define		subver	2015-06-01
 %define		ver		%(echo %{subver} | tr -d -)
 Summary:	C++ fast alternative to backtracking RE engines
 Name:		re2
@@ -12,9 +12,8 @@ Release:	1
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/google/re2/archive/%{subver}/%{name}-%{version}.tar.gz
-# Source0-md5:	72025cc33750878d0457c9422b396ee7
+# Source0-md5:	9c3503091ed0ad1f1a8ac8ed72b440e9
 Patch0:		test-compile.patch
-Patch1:		symbols.patch
 URL:		https://github.com/google/re2
 BuildRequires:	libstdc++-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -58,7 +57,6 @@ Statyczna biblioteka %{name}.
 %prep
 %setup -q -n %{name}-%{subver}
 %patch0 -p1
-%patch1 -p1
 
 %build
 # The -pthread flag issue has been submitted upstream:
@@ -99,8 +97,9 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %doc doc/syntax.txt
-%{_libdir}/libre2.so
 %{_includedir}/re2
+%{_libdir}/libre2.so
+%{_pkgconfigdir}/re2.pc
 
 %if %{with static_libs}
 %files static
