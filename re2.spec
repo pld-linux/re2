@@ -3,7 +3,7 @@
 %bcond_without	tests		# build without tests
 %bcond_without	static_libs	# don't build static libraries
 
-%define		subver	2015-06-01
+%define		subver	2015-11-01
 %define		ver		%(echo %{subver} | tr -d -)
 Summary:	C++ fast alternative to backtracking RE engines
 Name:		re2
@@ -12,7 +12,7 @@ Release:	1
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/google/re2/archive/%{subver}/%{name}-%{version}.tar.gz
-# Source0-md5:	9c3503091ed0ad1f1a8ac8ed72b440e9
+# Source0-md5:	e98d80675420f698c1ce7996ec4c474b
 Patch0:		test-compile.patch
 URL:		https://github.com/google/re2
 BuildRequires:	libstdc++-devel
