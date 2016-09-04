@@ -3,7 +3,7 @@
 %bcond_without	tests		# build without tests
 %bcond_without	static_libs	# don't build static libraries
 
-%define		subver	2015-11-01
+%define		subver	2016-09-01
 %define		ver		%(echo %{subver} | tr -d -)
 Summary:	C++ fast alternative to backtracking RE engines
 Name:		re2
@@ -12,11 +12,16 @@ Release:	1
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/google/re2/archive/%{subver}/%{name}-%{version}.tar.gz
-# Source0-md5:	e98d80675420f698c1ce7996ec4c474b
+# Source0-md5:	760ebe39914f81635ad85623502bcb20
 Patch0:		test-compile.patch
 URL:		https://github.com/google/re2
 BuildRequires:	libstdc++-devel
+BuildRequires:	rpmbuild(macros) >= 1.583
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# Seems harmless
+# std::__once_callable, std::__once_call
+%define		skip_post_check_so	libre2.so.0.0.0
 
 %description
 RE2 is a C++ library providing a fast, safe, thread-friendly
