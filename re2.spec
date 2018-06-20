@@ -16,12 +16,8 @@ Source0:	https://github.com/google/re2/archive/%{subver}/%{name}-%{version}.tar.
 Patch0:		test-compile.patch
 URL:		https://github.com/google/re2
 BuildRequires:	libstdc++-devel
-BuildRequires:	rpmbuild(macros) >= 1.583
+BuildRequires:	rpmbuild(macros) >= 1.734
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
-# Seems harmless
-# std::__once_callable, std::__once_call
-%define		skip_post_check_so	libre2.so.0.0.0
 
 %description
 RE2 is a C++ library providing a fast, safe, thread-friendly
