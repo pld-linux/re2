@@ -1,13 +1,15 @@
---- re2-20130115/Makefile~	2012-10-21 16:15:03.000000000 +0300
-+++ re2-20130115/Makefile	2013-03-16 14:27:32.606438040 +0200
-@@ -214,7 +214,9 @@
- 
+--- re2-2020-08-01/Makefile.orig	2020-09-26 09:45:26.973445896 +0200
++++ re2-2020-08-01/Makefile	2020-09-26 09:49:34.678770628 +0200
+@@ -260,8 +260,11 @@
+ .PHONY: testofiles
  testofiles: $(TESTOFILES)
  
--test: $(DTESTS) $(TESTS) $(STESTS) debug-test static-test shared-test
++.PHONY: compile-test
 +compile-test: $(DTESTS) $(TESTS) $(STESTS)
 +
+ .PHONY: test
+-test: $(DTESTS) $(TESTS) $(STESTS) debug-test static-test shared-test
 +test: compile-test debug-test static-test shared-test
  
+ .PHONY: debug-test
  debug-test: $(DTESTS)
- 	@echo

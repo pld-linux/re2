@@ -3,7 +3,7 @@
 %bcond_without	tests		# build without tests
 %bcond_without	static_libs	# don't build static libraries
 
-%define		tagver	2020-04-01
+%define		tagver	2020-08-01
 %define		ver		%(echo %{tagver} | tr -d -)
 Summary:	C++ fast alternative to backtracking RE engines
 Summary(pl.UTF-8):	Szybka alternatywna dla silników RE w C++
@@ -14,7 +14,7 @@ License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/google/re2/releases
 Source0:	https://github.com/google/re2/archive/%{tagver}/%{name}-%{tagver}.tar.gz
-# Source0-md5:	8e6079dff019309f1e1f0fad8cd637b8
+# Source0-md5:	6dbd1d52b21d2d0307495bf075e45d42
 Patch0:		test-compile.patch
 URL:		https://github.com/google/re2
 BuildRequires:	libstdc++-devel >= 6:4.7
@@ -115,7 +115,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS CONTRIBUTORS LICENSE README
 %attr(755,root,root) %{_libdir}/libre2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libre2.so.6
+%attr(755,root,root) %ghost %{_libdir}/libre2.so.8
 
 %files devel
 %defattr(644,root,root,755)
