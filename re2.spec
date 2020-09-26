@@ -15,6 +15,8 @@ Group:		Libraries
 #Source0Download: https://github.com/google/re2/releases
 Source0:	https://github.com/google/re2/archive/%{tagver}/%{name}-%{tagver}.tar.gz
 # Source0-md5:	6dbd1d52b21d2d0307495bf075e45d42
+Source1:	re2Config.cmake
+Source2:	re2Config-pld.cmake.in
 Patch0:		test-compile.patch
 URL:		https://github.com/google/re2
 BuildRequires:	libstdc++-devel >= 6:4.7
@@ -81,6 +83,8 @@ Statyczna biblioteka RE2.
 %patch0 -p1
 
 %build
+# cmake doesn't set soname, doesn't install .pc file - still use plain makefiles
+
 # The -pthread flag issue has been submitted upstream:
 # http://groups.google.com/forum/?fromgroups=#!topic/re2-dev/bkUDtO5l6Lo
 %{__make} all %{?with_tests:compile-test} \
@@ -105,6 +109,11 @@ rm -rf $RPM_BUILD_ROOT
 	libdir=%{_libdir} \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# ...but some users require cmake config files, so fake them
+install -d $RPM_BUILD_ROOT%{_libdir}/cmake/re2
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_libdir}/cmake/re2
+sed -e 's,@libdir@,%{_libdir},' %{SOURCE2} >$RPM_BUILD_ROOT%{_libdir}/cmake/re2/re2Config-pld.cmake
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -123,6 +132,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libre2.so
 %{_includedir}/re2
 %{_pkgconfigdir}/re2.pc
+%{_libdir}/cmake/re2
 
 %if %{with static_libs}
 %files static
