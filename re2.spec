@@ -3,7 +3,7 @@
 %bcond_without	tests		# build without tests
 %bcond_without	static_libs	# don't build static libraries
 
-%define		tagver	2020-08-01
+%define		tagver	2022-06-01
 %define		ver		%(echo %{tagver} | tr -d -)
 Summary:	C++ fast alternative to backtracking RE engines
 Summary(pl.UTF-8):	Szybka alternatywna dla silników RE w C++
@@ -14,11 +14,10 @@ License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/google/re2/releases
 Source0:	https://github.com/google/re2/archive/%{tagver}/%{name}-%{tagver}.tar.gz
-# Source0-md5:	6dbd1d52b21d2d0307495bf075e45d42
-Source1:	re2Config.cmake
-Source2:	re2Config-pld.cmake.in
+# Source0-md5:	cb629f38da6b7234a9e9eba271ded5d6
 Patch0:		test-compile.patch
 URL:		https://github.com/google/re2
+BuildRequires:	cmake >= 3.10.2
 BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	rpmbuild(macros) >= 1.734
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -83,36 +82,37 @@ Statyczna biblioteka RE2.
 %patch0 -p1
 
 %build
-# cmake doesn't set soname, doesn't install .pc file - still use plain makefiles
+%if %{with static_libs}
+%cmake -B build-static \
+	-DBUILD_SHARED_LIBS=OFF
 
-# The -pthread flag issue has been submitted upstream:
-# http://groups.google.com/forum/?fromgroups=#!topic/re2-dev/bkUDtO5l6Lo
-%{__make} all %{?with_tests:compile-test} \
-	CXX="%{__cxx}" \
-	CXXFLAGS="%{rpmcxxflags}" \
-	LDFLAGS="%{rpmldflags} -pthread" \
-	includedir=%{_includedir} \
-	libdir=%{_libdir}
+%{__make} -C build-static
+%endif
+
+%cmake -B build
+
+%{__make} -C build
 
 %if %{with tests}
-%{__make} test \
-	CXX="%{__cxx}" \
-	CXXFLAGS="%{rpmcxxflags}"
+%{__make} -C build test
 %endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
-	INSTALL="install -p" \
-	includedir=%{_includedir} \
-	libdir=%{_libdir} \
+%if %{with static_libs}
+%{__make} -C build-static install \
+	DESTDIR=$RPM_BUILD_ROOT
+%endif
+
+%{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# ...but some users require cmake config files, so fake them
-install -d $RPM_BUILD_ROOT%{_libdir}/cmake/re2
-cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_libdir}/cmake/re2
-sed -e 's,@libdir@,%{_libdir},' %{SOURCE2} >$RPM_BUILD_ROOT%{_libdir}/cmake/re2/re2Config-pld.cmake
+# cmake doesn't install .pc file, do it manually
+[ ! -f $RPM_BUILD_ROOT%{_pkgconfigdir}/re2.pc ] || exit 1
+install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
+%{__sed} -e 's,@includedir@,%{_includedir},' \
+	-e 's,@libdir@,%{_libdir},' re2.pc >$RPM_BUILD_ROOT%{_pkgconfigdir}/re2.pc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -122,9 +122,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS CONTRIBUTORS LICENSE README
+%doc AUTHORS CONTRIBUTORS LICENSE README SECURITY.md
 %attr(755,root,root) %{_libdir}/libre2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libre2.so.8
+%attr(755,root,root) %ghost %{_libdir}/libre2.so.9
 
 %files devel
 %defattr(644,root,root,755)
