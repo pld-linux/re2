@@ -9,13 +9,14 @@ Summary:	C++ fast alternative to backtracking RE engines
 Summary(pl.UTF-8):	Szybka alternatywna dla silników RE w C++
 Name:		re2
 Version:	%{ver}
-Release:	1
+Release:	2
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/google/re2/releases
 Source0:	https://github.com/google/re2/archive/%{tagver}/%{name}-%{tagver}.tar.gz
 # Source0-md5:	cb629f38da6b7234a9e9eba271ded5d6
 Patch0:		test-compile.patch
+Patch1:		%{name}-dirs.patch
 URL:		https://github.com/google/re2
 BuildRequires:	cmake >= 3.10.2
 BuildRequires:	libstdc++-devel >= 6:4.7
@@ -80,6 +81,7 @@ Statyczna biblioteka RE2.
 %prep
 %setup -q -n %{name}-%{tagver}
 %patch0 -p1
+%patch1 -p1
 
 %build
 %if %{with static_libs}
