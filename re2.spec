@@ -1,20 +1,20 @@
 #
 # Conditional build:
-%bcond_without	tests		# build without tests
-%bcond_without	static_libs	# don't build static libraries
+%bcond_without	tests		# unit tests
+%bcond_without	static_libs	# static library
 
-%define		tagver	2022-06-01
+%define		tagver	2023-03-01
 %define		ver		%(echo %{tagver} | tr -d -)
 Summary:	C++ fast alternative to backtracking RE engines
 Summary(pl.UTF-8):	Szybka alternatywna dla silników RE w C++
 Name:		re2
 Version:	%{ver}
-Release:	2
+Release:	1
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/google/re2/releases
 Source0:	https://github.com/google/re2/archive/%{tagver}/%{name}-%{tagver}.tar.gz
-# Source0-md5:	cb629f38da6b7234a9e9eba271ded5d6
+# Source0-md5:	d0ffffc37282c6d421853dedda53e138
 Patch0:		test-compile.patch
 Patch1:		%{name}-dirs.patch
 URL:		https://github.com/google/re2
@@ -110,12 +110,6 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# cmake doesn't install .pc file, do it manually
-[ ! -f $RPM_BUILD_ROOT%{_pkgconfigdir}/re2.pc ] || exit 1
-install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
-%{__sed} -e 's,@includedir@,%{_includedir},' \
-	-e 's,@libdir@,%{_libdir},' re2.pc >$RPM_BUILD_ROOT%{_pkgconfigdir}/re2.pc
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -126,7 +120,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS CONTRIBUTORS LICENSE README SECURITY.md
 %attr(755,root,root) %{_libdir}/libre2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libre2.so.9
+%attr(755,root,root) %ghost %{_libdir}/libre2.so.10
 
 %files devel
 %defattr(644,root,root,755)
