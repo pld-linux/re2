@@ -3,7 +3,7 @@
 %bcond_without	tests		# unit tests
 %bcond_without	static_libs	# static library
 
-%define		tagver	2023-03-01
+%define		tagver	2024-05-01
 %define		ver		%(echo %{tagver} | tr -d -)
 Summary:	C++ fast alternative to backtracking RE engines
 Summary(pl.UTF-8):	Szybka alternatywna dla silników RE w C++
@@ -14,13 +14,15 @@ License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/google/re2/releases
 Source0:	https://github.com/google/re2/archive/%{tagver}/%{name}-%{tagver}.tar.gz
-# Source0-md5:	d0ffffc37282c6d421853dedda53e138
+# Source0-md5:	ad0d8b0639b84b89095e3ea583c89125
 Patch0:		test-compile.patch
-Patch1:		%{name}-dirs.patch
 URL:		https://github.com/google/re2
-BuildRequires:	cmake >= 3.10.2
-BuildRequires:	libstdc++-devel >= 6:4.7
-BuildRequires:	rpmbuild(macros) >= 1.734
+BuildRequires:	abseil-cpp-devel
+BuildRequires:	cmake >= 3.13
+%{?with_tests:BuildRequires:	google-benchmark-devel}
+%{?with_tests:BuildRequires:	gtest-devel}
+BuildRequires:	libstdc++-devel >= 6:5
+BuildRequires:	rpmbuild(macros) >= 1.742
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -56,6 +58,7 @@ Summary:	C++ header files and library symbolic link for RE2
 Summary(pl.UTF-8):	Pliki nagłówkowe C++ i dowiązanie do biblioteki RE2
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	abseil-cpp-devel
 Requires:	libstdc++-devel >= 6:4.7
 
 %description devel
@@ -81,7 +84,6 @@ Statyczna biblioteka RE2.
 %prep
 %setup -q -n %{name}-%{tagver}
 %patch0 -p1
-%patch1 -p1
 
 %build
 %if %{with static_libs}
@@ -91,7 +93,8 @@ Statyczna biblioteka RE2.
 %{__make} -C build-static
 %endif
 
-%cmake -B build
+%cmake -B build \
+	%{cmake_on_off tests RE2_BUILD_TESTING}
 
 %{__make} -C build
 
@@ -118,9 +121,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS CONTRIBUTORS LICENSE README SECURITY.md
+%doc CONTRIBUTING.md LICENSE README SECURITY.md
 %attr(755,root,root) %{_libdir}/libre2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libre2.so.10
+%attr(755,root,root) %ghost %{_libdir}/libre2.so.11
 
 %files devel
 %defattr(644,root,root,755)
