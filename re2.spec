@@ -3,13 +3,14 @@
 %bcond_without	tests		# unit tests
 %bcond_without	static_libs	# static library
 
+# 2024-06-01+ require abseil-cpp 2024+
 %define		tagver	2024-05-01
 %define		ver		%(echo %{tagver} | tr -d -)
 Summary:	C++ fast alternative to backtracking RE engines
 Summary(pl.UTF-8):	Szybka alternatywna dla silników RE w C++
 Name:		re2
 Version:	%{ver}
-Release:	1
+Release:	2
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/google/re2/releases
