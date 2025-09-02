@@ -10,7 +10,7 @@ Summary:	C++ fast alternative to backtracking RE engines
 Summary(pl.UTF-8):	Szybka alternatywna dla silników RE w C++
 Name:		re2
 Version:	%{ver}
-Release:	2
+Release:	3
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/google/re2/releases
