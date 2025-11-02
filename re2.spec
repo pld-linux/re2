@@ -3,27 +3,27 @@
 %bcond_without	tests		# unit tests
 %bcond_without	static_libs	# static library
 
-# 2024-06-01+ require abseil-cpp 2024+
-%define		tagver	2024-05-01
+%define		tagver	2025-08-12
 %define		ver		%(echo %{tagver} | tr -d -)
+%define		abseil_ver	20250127
 Summary:	C++ fast alternative to backtracking RE engines
 Summary(pl.UTF-8):	Szybka alternatywna dla silników RE w C++
 Name:		re2
 Version:	%{ver}
-Release:	3
+Release:	1
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/google/re2/releases
 Source0:	https://github.com/google/re2/archive/%{tagver}/%{name}-%{tagver}.tar.gz
-# Source0-md5:	ad0d8b0639b84b89095e3ea583c89125
+# Source0-md5:	42b09a49841249c5ff004df5f2ed6202
 Patch0:		test-compile.patch
 URL:		https://github.com/google/re2
-BuildRequires:	abseil-cpp-devel
-BuildRequires:	cmake >= 3.13
+BuildRequires:	abseil-cpp-devel >= %{abseil_ver}
+BuildRequires:	cmake >= 3.22
 %{?with_tests:BuildRequires:	google-benchmark-devel}
 %{?with_tests:BuildRequires:	gtest-devel}
-BuildRequires:	libstdc++-devel >= 6:5
-BuildRequires:	rpmbuild(macros) >= 1.742
+BuildRequires:	libstdc++-devel >= 6:7
+BuildRequires:	rpmbuild(macros) >= 2.047
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -59,8 +59,8 @@ Summary:	C++ header files and library symbolic link for RE2
 Summary(pl.UTF-8):	Pliki nagłówkowe C++ i dowiązanie do biblioteki RE2
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	abseil-cpp-devel
-Requires:	libstdc++-devel >= 6:4.7
+Requires:	abseil-cpp-devel >= %{abseil_ver}
+Requires:	libstdc++-devel >= 6:7
 
 %description devel
 This package contains the C++ header files and symbolic link to the
@@ -95,7 +95,7 @@ Statyczna biblioteka RE2.
 %endif
 
 %cmake -B build \
-	%{cmake_on_off tests RE2_BUILD_TESTING}
+	-DRE2_BUILD_TESTING=%{__ON_OFF tests}
 
 %{__make} -C build
 
@@ -122,14 +122,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CONTRIBUTING.md LICENSE README SECURITY.md
+%doc LICENSE README.md SECURITY.md
 %attr(755,root,root) %{_libdir}/libre2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libre2.so.11
+%ghost %{_libdir}/libre2.so.11
 
 %files devel
 %defattr(644,root,root,755)
 %doc doc/syntax.txt
-%attr(755,root,root) %{_libdir}/libre2.so
+%{_libdir}/libre2.so
 %{_includedir}/re2
 %{_pkgconfigdir}/re2.pc
 %{_libdir}/cmake/re2
